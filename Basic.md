@@ -44,3 +44,16 @@ Kafka এখন KRaft mode (Kafka Raft) ব্যবহার করে যে�
 ```
 এটাই হলো Kafka-র “storage formatting step” —
 অর্থাৎ এখন থেকে Kafka জানে এই সার্ভার কোন cluster-এর অংশ এবং কোথায় data রাখবে।
+
+## Kafka সার্ভার চালাও 
+```
+
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+```
+
+সফলভাবে চললে তুমি দেখবে এরকম কিছু:
+[KafkaServer id=1] started (kafka.server.KafkaServer)
+INFO [KafkaServer id=1] Kafka Server started in KRaft mode
+
+
+এবং Kafka এখন running & ready 
