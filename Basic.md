@@ -33,3 +33,9 @@ fwVwvLx-RlK2Rb5mA8u3SA
 
 Kafka এখন KRaft mode (Kafka Raft) ব্যবহার করে যেখানে ZooKeeper আর আলাদা লাগে না।
 এই মোডে Kafka নিজেই তার মেটাডাটা পরিচালনা করে, তাই প্রতিটি ক্লাস্টারের জন্য একটি ইউনিক cluster ID প্রয়োজন।
+
+## single-node/broker/ Kafka server চালাতে (Windows-এ লোকালি টেস্ট করার জন্য),
+তাহলে নিচের কমান্ডটাই ব্যবহার করো 
+```
+
+.\bin\windows\kafka-storage.bat format -t bbQsvOxWTiiObpcndlafzA -c .\config\server.properties --standalone
