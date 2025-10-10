@@ -87,7 +87,7 @@ Flag	কাজ
 --replication-factor	কতটি broker এ কপি থাকবে (single node হলে 1)
 Verify (চেক করো Topic তৈরি হয়েছে কিনা)
 .\bin\windows\kafka-topics.bat --list --bootstrap-server localhost:9092
-```
+
 
 তুমি দেখবে 
 
