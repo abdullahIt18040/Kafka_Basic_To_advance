@@ -1,13 +1,6 @@
 
 ## Kafka server Run step by step 
 
-Format the storage (create log directory)
-
-Before formatting, you must specify:
-```
-cluster.id — a unique ID for your Kafka cluster
-```
-the path to server.properties
 
 ## Generate a cluster ID first:
 ```
