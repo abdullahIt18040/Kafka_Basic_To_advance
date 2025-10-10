@@ -57,3 +57,47 @@ INFO [KafkaServer id=1] Kafka Server started in KRaft mode
 
 
 এবং Kafka এখন running & ready 
+## Step-by-Step: Create a Topic in Kafka (Windows)
+ নিশ্চিত হও Kafka সার্ভার চলছে
+
+CMD-এ (একটি আলাদা টার্মিনালে) নিচের মতো করে Kafka সার্ভার চালাও:
+```
+
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+```
+
+Kafka চালু না থাকলে topic তৈরি হবে না।
+
+নতুন CMD উইন্ডো খোলো
+
+এখন তুমি অন্য একটা টার্মিনালে topic তৈরি করবে।
+
+## Topic তৈরি করো
+```
+নিচের কমান্ড চালাও 
+
+.\bin\windows\kafka-topics.bat --create --topic my-first-topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+ কমান্ড ব্যাখ্যা:
+Flag	কাজ
+--create	নতুন topic তৈরি করবে
+--topic	টপিকের নাম — এখানে my-first-topic
+--bootstrap-server	Kafka broker এর ঠিকানা (সাধারণত localhost:9092)
+--partitions	কতগুলো partition থাকবে (সাধারণত 1)
+--replication-factor	কতটি broker এ কপি থাকবে (single node হলে 1)
+Verify (চেক করো Topic তৈরি হয়েছে কিনা)
+.\bin\windows\kafka-topics.bat --list --bootstrap-server localhost:9092
+```
+
+তুমি দেখবে 
+
+my-first-topic
+
+
+মানে Topic সফলভাবে তৈরি হয়েছে 
+
+Optional – Topic Details দেখতে চাও?
+.\bin\windows\kafka-topics.bat --describe --topic my-first-topic --bootstrap-server localhost:9092
+
+
+এতে partition ও replication সম্পর্কিত বিস্তারিত দেখাবে।
