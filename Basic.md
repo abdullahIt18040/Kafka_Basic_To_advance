@@ -4,16 +4,16 @@
 Format the storage (create log directory)
 
 Before formatting, you must specify:
-
+```
 cluster.id — a unique ID for your Kafka cluster
-
+```
 the path to server.properties
 
-📘 Generate a cluster ID first:
-
+## Generate a cluster ID first:
+```
 .\bin\windows\kafka-storage.bat random-uuid
 
-
+```
 This will print something like:
 
 fwVwvLx-RlK2Rb5mA8u3SA
