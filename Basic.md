@@ -184,4 +184,26 @@ Option	Description
 উদাহরণ:
 
 >Hello Kafka
->
+>thi sis abdullah
+
+
+```
+### Consumer চালু করো (অন্য উইন্ডোতে)
+
+একই সময় আরেকটি নতুন টার্মিনাল খুলে নিচের কমান্ড চালাও, যাতে তুমি মেসেজগুলো দেখতে পারো
+```
+
+.\bin\windows\kafka-console-consumer.bat --topic test-topic --from-beginning --bootstrap-server localhost:9092
+
+```
+তখন তুমি আগের producer থেকে পাঠানো মেসেজগুলো দেখতে পাবে:
+
+Hello Kafka
+This is my first message
+
+ সংক্ষিপ্ত সারাংশ:
+ধাপ	কমান্ড	কাজ
+kafka-server-start.bat .\config\server.properties	সার্ভার চালানো
+kafka-topics.bat --create ...	টপিক তৈরি	kafka-console-producer.bat --topic test-topic ...	প্রডিউসার চালানো	kafka-console-consumer.bat --topic test-topic ...	কনজিউমার চালানো
+
+তুমি চাও কি আমি দেখাই কিভাবে producer থেকে JSON
