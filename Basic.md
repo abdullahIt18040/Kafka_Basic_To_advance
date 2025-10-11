@@ -146,3 +146,22 @@ Kafka শুধুমাত্র ISR-এর মধ্যে থেকে leader
  এক লাইনে:
 
 ISR (In-Sync Replica) = যে replicas বর্তমানে leader-এর সাথে data sync আছে।
+
+### তুমি যদি Kafka producer-এর সব available options দেখতে চাও (Windows-এ),
+তাহলে নিচের কমান্ড চালালেই হবে 
+```
+ Command:
+.\bin\windows\kafka-console-producer.bat --help
+
+ Output (সংক্ষেপে কিছু গুরুত্বপূর্ণ অংশ):
+
+এটা অনেক বড় লিস্ট দেখাবে, কিন্তু নিচে কিছু গুরুত্বপূর্ণ options দেওয়া হলো 
+
+Option	Description
+--topic <topic>	কোন টপিকে মেসেজ পাঠাবে তা নির্ধারণ করে
+--bootstrap-server <host:port>	Kafka broker address (যেমন localhost:9092)
+--property key.separator=:	key এবং value আলাদা করার জন্য separator দেয়
+--property parse.key=true	key-value format মেসেজ পাঠাতে সক্ষম করে
+--producer.config <file>	custom configuration ফাইল ব্যবহার করতে দেয়
+--request-required-acks	producer-এর acknowledgment behavior নির্ধারণ করে
+--compression-type	compression enable করে (gzip, snappy, lz4 ইত্যাদি)
