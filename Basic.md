@@ -99,5 +99,50 @@ my-first-topic
 Optional – Topic Details দেখতে চাও?
 .\bin\windows\kafka-topics.bat --describe --topic my-first-topic --bootstrap-server localhost:9092
 
-
+```
 এতে partition ও replication সম্পর্কিত বিস্তারিত দেখাবে।
+## ISR (In-Sync Replica) কী?
+
+ISR = In-Sync Replicas
+মানে হলো — কোনো partition-এর যত replicas আছে, তার মধ্যে যেগুলো leader-এর সাথে পুরোপুরি sync (up-to-date) আছে, সেগুলোই ISR তালিকায় থাকে।
+
+Kafka-তে প্রতিটি partition-এর একটি leader replica থাকে (যেটি write/read পরিচালনা করে),
+আর অন্যান্য replicas হলো followers, যারা leader থেকে data copy করে।
+
+ উদাহরণ দিয়ে বোঝাই:
+
+ধরা যাক, তুমি এই কমান্ড চালাও
+```
+
+.\bin\windows\kafka-topics.bat --describe --topic my-first-topic --bootstrap-server localhost:9092
+
+
+তুমি এরকম আউটপুট পাবে:
+
+Topic: my-first-topic  TopicId: xyz123
+PartitionCount: 1  ReplicationFactor: 1  Configs: segment.bytes=1073741824
+    Topic: my-first-topic  Partition: 0  Leader: 0  Replicas: 0  Isr: 0
+
+ প্রতিটি অংশের অর্থ:
+ফিল্ড	মানে
+Topic	টপিকের নাম
+Partition	পার্টিশন নম্বর (এখানে 0)
+Leader	কোন broker বর্তমানে leader
+Replicas	এই partition-এর সব replicas কোন কোন broker-এ আছে
+ISR (In-Sync Replica)	যে replicas বর্তমানে leader-এর সাথে sync আছে
+ উদাহরণ (multi-broker setup হলে):
+Topic: orders  Partition: 0  Leader: 1  Replicas: 1,2,3  Isr: 1,2
+
+
+ Leader = 1 → Broker 1 is leader
+ Replicas = 1,2,3 → তিনটি broker এ copy আছে
+ ISR = 1,2 → Broker 1 ও 2 sync এ আছে, কিন্তু broker 3 পিছিয়ে আছে
+```
+## ISR কেন গুরুত্বপূর্ণ?
+
+ISR বোঝায় কোন replicas safe এবং up-to-date.
+Kafka শুধুমাত্র ISR-এর মধ্যে থেকে leader নির্বাচন করে যাতে data loss না হয়।
+
+ এক লাইনে:
+
+ISR (In-Sync Replica) = যে replicas বর্তমানে leader-এর সাথে data sync আছে।
