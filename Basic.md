@@ -165,3 +165,23 @@ Option	Description
 --producer.config <file>	custom configuration ফাইল ব্যবহার করতে দেয়
 --request-required-acks	producer-এর acknowledgment behavior নির্ধারণ করে
 --compression-type	compression enable করে (gzip, snappy, lz4 ইত্যাদি)
+```
+### Producer চালু করো
+
+এখন সেই একই টপিকে মেসেজ পাঠাতে producer চালাও 
+```
+
+.\bin\windows\kafka-console-producer.bat --topic test-topic --bootstrap-server localhost:9092
+
+```
+এখন তোমার কনসোল দেখতে এমন হবে:
+
+>Hello Kafka
+>This is my first message
+
+
+এখানে এখন তুমি সরাসরি মেসেজ লিখে Enter চাপলে সেটা টপিকে যাবে।
+উদাহরণ:
+
+>Hello Kafka
+>
