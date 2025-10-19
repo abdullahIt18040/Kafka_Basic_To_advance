@@ -236,3 +236,37 @@ Option                                  Description
  Most Commonly Used Commands
 Task	Command Example
 Consume all messages from beginning	
+
+## Add Property 
+In Kafka CLI (Command Line), we "add a property" using:
+```
+--property key=value
+
+```
+আপনি যখন কোনও অতিরিক্ত property (যেমন offset, partition ইত্যাদি দেখানোর জন্য) যুক্ত করতে চান, তখন প্রতিটি property আলাদা করে এইভাবে যোগ করতে হয়:
+```
+--property propertyName=value
+
+ Example: Adding multiple properties
+
+আপনি আগেও যে কমান্ড দিয়েছেন, সেখানে আপনি দুইটি property যোগ করেছেন এভাবে:
+
+--property print.partition=true --property print.offset=true
+
+More Example: যদি আপনি key-ও print করতে চান
+.\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic my-test-topic --property print.partition=true --property print.offset=true --property print.key=true
+```
+### Full Explain (ব)
+Property	কাজ
+````
+print.partition=true	কোন partition থেকে মেসেজ এসেছে সেটা দেখাবে
+print.offset=true	offset (মেসেজের অবস্থান নম্বর) দেখাবে
+print.key=true	যদি মেসেজে key থাকে, সেটাও দেখাবে
+print.timestamp=true	মেসেজ কবে লেখা হয়েছে তার timestamp দেখাবে
+সাধারণ Structure (মনে রাখুন 👇):
+--property propertyName=value
+```
+
+আপনি যত property চান ততবার --property লিখতে হবে।
+
+
