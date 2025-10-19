@@ -207,3 +207,32 @@ kafka-server-start.bat .\config\server.properties	সার্ভার চা�
 kafka-topics.bat --create ...	টপিক তৈরি	kafka-console-producer.bat --topic test-topic ...	প্রডিউসার চালানো	kafka-console-consumer.bat --topic test-topic ...	কনজিউমার চালানো
 
 তুমি চাও কি আমি দেখাই কিভাবে producer থেকে JSON
+
+## Help menue 
+```
+
+.\bin\windows\kafka-console-consumer.bat -h
+
+```
+Kafka will display the help menu, showing all available options you can use with the consumer command. It usually prints something like this:
+
+## Example output you'll see (or similar):
+```
+Option                                  Description
+------                                  -----------
+--bootstrap-server <String: server to   REQUIRED: The Kafka server to connect to.
+  use for bootstrapping>
+--topic <String: topic>                 REQUIRED: The topic id to consume on.
+--partition <Integer: partition>        The partition to consume from.
+--offset <String: consume offset>       The offset to start consuming from (e.g., earliest, latest).
+--from-beginning                        Consume messages from the beginning of the topic.
+--group <String: consumer group id>     Consumer group id.
+--max-messages <Integer>                Exit after consuming this many messages.
+--property <String: name=value>         Kafka consumer properties.
+--timeout-ms <Integer: ms>              Timeout for waiting for messages.
+--formatter <class>                     Message formatter class.
+--help                                  Print usage information (alias: -h).
+```
+ Most Commonly Used Commands
+Task	Command Example
+Consume all messages from beginning	
