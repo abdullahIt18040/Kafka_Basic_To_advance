@@ -256,17 +256,43 @@ In Kafka CLI (Command Line), we "add a property" using:
 More Example: যদি আপনি key-ও print করতে চান
 .\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic my-test-topic --property print.partition=true --property print.offset=true --property print.key=true
 ```
-### Full Explain (ব)
+### Full Explain 
+
 Property	কাজ
 ````
 print.partition=true	কোন partition থেকে মেসেজ এসেছে সেটা দেখাবে
 print.offset=true	offset (মেসেজের অবস্থান নম্বর) দেখাবে
 print.key=true	যদি মেসেজে key থাকে, সেটাও দেখাবে
 print.timestamp=true	মেসেজ কবে লেখা হয়েছে তার timestamp দেখাবে
-সাধারণ Structure (মনে রাখুন 👇):
---property propertyName=value
+সাধারণ Structure (মনে রাখুন ):
+property propertyName=value
 ```
 
 আপনি যত property চান ততবার --property লিখতে হবে।
 
+### print keys and values
 
+correct command with the right property syntax and spacing:
+```
+.\bin\windows\kafka-console-producer.bat --topic my-first-topic --bootstrap-server localhost:9092 --property parse.key=true --property key.separator=:
+
+
+ Explanation:
+
+Part	Meaning
+--property parse.key=true	Tells Kafka to treat the message as key-value format.
+--property key.separator=:	Defines ":" as the separator between key and value.
+✅ Example usage after running the command:
+
+Now you can type messages in this format:
+
+key1:value1
+key2:value2
+
+
+Each line you enter will be sent to Kafka with:
+
+key = text before :
+
+value = text after :
+```
