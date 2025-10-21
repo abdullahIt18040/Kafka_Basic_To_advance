@@ -259,7 +259,7 @@ More Example: যদি আপনি key-ও print করতে চান
 ### Full Explain 
 
 Property	কাজ
-````
+```
 print.partition=true	কোন partition থেকে মেসেজ এসেছে সেটা দেখাবে
 print.offset=true	offset (মেসেজের অবস্থান নম্বর) দেখাবে
 print.key=true	যদি মেসেজে key থাকে, সেটাও দেখাবে
@@ -282,7 +282,7 @@ correct command with the right property syntax and spacing:
 Part	Meaning
 --property parse.key=true	Tells Kafka to treat the message as key-value format.
 --property key.separator=:	Defines ":" as the separator between key and value.
-✅ Example usage after running the command:
+ Example usage after running the command:
 
 Now you can type messages in this format:
 
