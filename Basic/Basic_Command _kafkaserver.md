@@ -296,3 +296,14 @@ key = text before :
 
 value = text after :
 ```
+## Multiple Partion Creation 
+```
+.\bin\windows\kafka-topics.bat --create --topic my-first-topicone --bootstrap-server localhost:9092 --partitions 2 --replication-factor 1
+```
+## To see Details 
+```
+.\bin\windows\kafka-topics.bat --describe --topic my-first-topicone --bootstrap-server localhost:9092
+
+```
+
+
