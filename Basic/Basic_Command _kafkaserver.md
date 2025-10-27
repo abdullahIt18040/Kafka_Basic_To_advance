@@ -410,7 +410,7 @@ No duplicate messages	একটি মেসেজ কেবল একটি con
 ## cluster
 
 A Kafka cluster is a group of one or more Kafka brokers (servers) working together to provide high availability, scalability, and fault tolerance for message streaming. When you hear “Kafka cluster,” think of multiple Kafka servers collaborating to handle data efficiently.
-
+```
 ✅ Components of a Kafka Cluster
 Component	Description
 Brokers	These are Kafka servers that store and serve messages. A cluster usually has multiple brokers (e.g., Broker 0, 1, 2).
