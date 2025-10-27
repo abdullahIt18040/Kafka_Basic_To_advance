@@ -351,7 +351,7 @@ partitioner.class=org.apache.kafka.clients.producer.internals.DefaultPartitioner
 📍Key পেলে → key.hash() দিয়ে partition নির্ধারণ করে
 ```
 ## Consumer Group কী?
-
+```
 Kafka-তে Consumer Group হলো এমন একটি ব্যবস্থা যেখানে একাধিক consumer মিলেই একটি group হিসেবে কাজ করে।
 একটি topic-এর মেসেজগুলো Kafka সেই গ্রুপের consumer গুলোর মধ্যে ভাগ করে দেয়।
 
@@ -389,7 +389,7 @@ C:\kafka> .\bin\windows\kafka-console-consumer.bat --topic my-first-topicone --g
 📍এখন আপনার দুইটি consumer একই গ্রুপে আছে।
 Kafka প্রতিটি মেসেজ একটি consumer-এ পাঠাবে। (লোড ব্যালেন্সিং হবে)
 
-✅ ধাপ ৪: গ্রুপের অবস্থা দেখতে চাইলে
+ধাপ ৪: গ্রুপের অবস্থা দেখতে চাইলে
 C:\kafka> .\bin\windows\kafka-consumer-groups.bat --describe --group my-group --bootstrap-server localhost:9092
 
 
@@ -406,4 +406,57 @@ Load balancing	একাধিক consumer একসাথে কাজ ভা�
 Scalability	গ্রুপে আরও consumer যোগ করলে পারফরম্যান্স বাড়ে
 No duplicate messages	একটি মেসেজ কেবল একটি consumer-এ যায় (group-এর মধ্যে)
 
+```
+## cluster
+
+A Kafka cluster is a group of one or more Kafka brokers (servers) working together to provide high availability, scalability, and fault tolerance for message streaming. When you hear “Kafka cluster,” think of multiple Kafka servers collaborating to handle data efficiently.
+
+✅ Components of a Kafka Cluster
+Component	Description
+Brokers	These are Kafka servers that store and serve messages. A cluster usually has multiple brokers (e.g., Broker 0, 1, 2).
+Zookeeper (Legacy)	Manages cluster metadata (e.g., broker info, topic configs). Required before Kafka v3.0.
+Kafka Controller (KRaft mode)	In newer versions (Kafka 3+), KRaft replaces ZooKeeper.
+Topics	Logical categories of messages within the cluster.
+Partitions	Each topic is split into partitions distributed across brokers.
+Producers	Send/write data to the cluster.
+Consumers	Read data from the cluster.
+✅ How a Kafka Cluster Works (Example)
+
+Let's say you have a topic called orders with 3 partitions:
+
+Partition	Stored On Broker
+Partition 0	Broker 1
+Partition 1	Broker 2
+Partition 2	Broker 3
+
+✅ This distribution allows Kafka to process messages in parallel and gives high throughput.
+✅ If one broker fails, replicas on another broker can take over (when replication is enabled).
+
+✅ Why Use a Kafka Cluster?
+Advantage	Description
+Scalability	Add more brokers to handle more traffic.
+Fault Tolerance	Data can be replicated across brokers.
+High Availability	Even if one broker fails, others take over.
+High Throughput	Multiple partitions allow parallel processing.
+✅ Minimum Setup for a Kafka Cluster
+Environment	Brokers Needed
+Local testing	1 broker (single-node cluster)
+Small project	2-3 brokers
+Production	3+ brokers (for fault tolerance + replication)
+✅ Example: Starting a 3-Broker Cluster Locally (Manually)
+
+Duplicate Kafka config files (server.properties):
+
+server-1.properties, server-2.properties, server-3.properties
+
+Modify:
+
+broker.id=1
+listeners=PLAINTEXT://localhost:9093
+log.dirs=/tmp/kafka-logs-1
+
+
+(Repeat for other brokers with different IDs/ports/logs)
+
+Start brokers:
 ```
