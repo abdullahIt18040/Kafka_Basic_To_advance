@@ -459,4 +459,6 @@ log.dirs=/tmp/kafka-logs-1
 (Repeat for other brokers with different IDs/ports/logs)
 
 Start brokers:
+
+Fault Tolerance মানে হলো — Kafka একাধিক broker-এ ডেটার কপি রেখে দেয়, যাতে কোনো broker নষ্ট হলেও ডেটা হারায় না এবং সিস্টেম বন্ধ না হয়।
 ```
