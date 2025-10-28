@@ -336,6 +336,11 @@ to see list of topic
 .\bin\windows\kafka-topics.bat  --bootstrap-server localhost:9092 --describe --topic test
 
 ```
-## Create Producer 
+## Create Producer  and consumer 
 ```
+.\bin\windows\kafka-console-producer.bat  --bootstrap-server localhost:9092 --topic test
+.\bin\windows\kafka-console-consumer.bat  --bootstrap-server localhost:9092 --topic test --from-beginning
+```
+
+
 
