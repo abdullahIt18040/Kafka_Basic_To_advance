@@ -291,3 +291,13 @@ Leader তার follower-দের কাছে data replicate করে।
 🧭 Controller = কে leader হবে তা ঠিক করে
 👑 Leader = data handle করে
 ```
+
+### if we want to create multiple node or server in a cluster we should have create server.property for each node or server.
+```
+Go 
+config>> server.property 
+copy it for each node
+
+```
+
+
