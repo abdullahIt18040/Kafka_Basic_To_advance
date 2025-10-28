@@ -324,6 +324,8 @@ C:\kafka>.\bin\windows\kafka-metadata-quorum.bat --bootstrap-controller localhos
 ```
 
 
+## Create Topic each Nodes
+```
 
 
 
