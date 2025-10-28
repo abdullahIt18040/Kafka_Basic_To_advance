@@ -348,4 +348,4 @@ replication factor must be less then or equal  total node of a cluster
 .\bin\windows\kafka-topics.bat  --bootstrap-server localhost:9092 --create --topic test2 --replication-factor 3
 
 ```
-
+## when multiple nodes are available in  a cluster every 
