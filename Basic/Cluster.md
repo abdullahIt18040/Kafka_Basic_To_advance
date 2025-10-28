@@ -297,6 +297,7 @@ Leader তার follower-দের কাছে data replicate করে।
 Go 
 config>> server.property 
 copy it for each node
+configure node no, port,log file 
 
 ```
 ### To create multiple node in a cluster we have to write 
@@ -306,6 +307,23 @@ C:\kafka>.\bin\windows\kafka-storage.bat format --cluster-id sdlcpro-01521122140
 C:\kafka>.\bin\windows\kafka-storage.bat format --cluster-id sdlcpro-01521122140 --initial-controllers 111@localhost:9093:dvvIe3AwR4-ycio5syoq4g,222@localhost:9095:0Y_aMQ_aR2i2QshS2cXJyw,333@localhost:9097:Ajw-zSkdTrmUoBS0sh_TwQ --config ./config/server_222.properties
 C:\kafka>.\bin\windows\kafka-storage.bat format --cluster-id sdlcpro-01521122140 --initial-controllers 111@localhost:9093:dvvIe3AwR4-ycio5syoq4g,222@localhost:9095:0Y_aMQ_aR2i2QshS2cXJyw,333@localhost:9097:Ajw-zSkdTrmUoBS0sh_TwQ --config ./config/server_333.properties
 ```
+## Run theses nodes
+```
+.\bin\windows\kafka-server-start.bat .\config\server_111.properties
+.\bin\windows\kafka-server-start.bat .\config\server_222.properties
+.\bin\windows\kafka-server-start.bat .\config\server_333.properties
+
+```
+## if we want to see  details 
+```
+C:\kafka>.\bin\windows\kafka-metadata-quorum.bat --bootstrap-controller localhost:9093 describe --status
+```
+## if we want to see flower or leader details 
+```
+C:\kafka>.\bin\windows\kafka-metadata-quorum.bat --bootstrap-controller localhost:9093 describe --replication
+```
+
+
 
 
 
