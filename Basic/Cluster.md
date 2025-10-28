@@ -326,6 +326,16 @@ C:\kafka>.\bin\windows\kafka-metadata-quorum.bat --bootstrap-controller localhos
 
 ## Create Topic each Nodes
 ```
+.\bin\windows\kafka-topics.bat  --bootstrap-server localhost:9092 --create --topic test
 
+to see list of topic
 
+.\bin\windows\kafka-topics.bat  --bootstrap-server localhost:9092 --list
+
+ to see  describe of topic
+.\bin\windows\kafka-topics.bat  --bootstrap-server localhost:9092 --describe --topic test
+
+```
+## Create Producer 
+```
 
