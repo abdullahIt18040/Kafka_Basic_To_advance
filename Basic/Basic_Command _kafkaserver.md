@@ -1,4 +1,4 @@
-
+## controller participate election to select leader
 ## Kafka server Run step by step 
 
 
