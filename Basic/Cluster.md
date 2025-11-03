@@ -290,6 +290,61 @@ Leader তার follower-দের কাছে data replicate করে।
 
 🧭 Controller = কে leader হবে তা ঠিক করে
 👑 Leader = data handle করে
+
+Kafka Controller সাধারণত data store করে না (topic message data না)
+✅ তবে controller node broker হিসেবেও চললে, তখন সে data রাখতে পারে।
+
+চলুন বিস্তারিতভাবে বুঝে নিই 👇
+
+🧭 Kafka Controller-এর কাজ কী?
+
+Controller হলো Kafka cluster-এর “manager” —
+এর মূল দায়িত্ব হলো metadata management, leader election, এবং cluster coordination করা।
+
+⚙️ Controller যা করে:
+কাজ	ব্যাখ্যা
+🗂️ Metadata সংরক্ষণ	কোন topic, partition, broker, leader আছে — এই তথ্য controller-এর কাছে থাকে।
+⚖️ Leader নির্বাচন করে	কোনো broker নষ্ট হলে, নতুন leader নির্বাচন করে।
+🧑‍💼 Broker monitoring করে	কোন broker online/offline আছে তা দেখে।
+🔁 Replication coordinate করে	follower partition-গুলো leader-এর সাথে sync আছে কিনা, তা নিশ্চিত করে।
+💾 Controller data রাখে কি?
+
+এখানে “data” বলতে দুই ধরনের বিষয় বোঝানো হয় 👇
+
+ডেটার ধরন	Controller রাখে কি?	ব্যাখ্যা
+🧠 Metadata (Topic info, broker list, etc.)	✅ হ্যাঁ	Controller এই তথ্য Raft log-এ রাখে (KRaft mode-এ)।
+📦 User Data (messages in topics)	❌ না	এই data broker-এ থাকে, controller-এ না।
+🧩 যখন Controller এবং Broker একসাথে হয়:
+
+Kafka 3.x+ (KRaft mode)-এ, তুমি চাইলে একটি node-কে একইসাথে controller + broker হিসেবে চালাতে পারো।
+
+🔸 তখন সেই node দুটি ভূমিকা পালন করবে:
+
+Controller হিসেবে → Metadata পরিচালনা করবে
+
+Broker হিসেবে → Data (topic messages) সংরক্ষণ করবে
+
+উদাহরণ config:
+process.roles=broker,controller
+node.id=1
+controller.listener.names=CONTROLLER
+listeners=PLAINTEXT://localhost:9092,CONTROLLER://localhost:9093
+
+
+👉 এই কনফিগ মানে: একই node controller ও broker দুই কাজই করছে।
+
+⚖️ সংক্ষেপে:
+বিষয়	Controller	Broker
+Metadata রাখে	✅ হ্যাঁ	⚪ আংশিক
+User data (messages) রাখে	❌ না	✅ হ্যাঁ
+Role type	Cluster Manager	Data Handler
+KRaft Log রাখে	✅ হ্যাঁ	❌ না
+
+🎯 সহজভাবে মনে রাখো:
+
+🧭 Controller data manage করে (metadata)
+💾 Broker data store করে (messages)
+
 ```
 
 ### if we want to create multiple node or server in a cluster we should have create server.property for each node or server.
