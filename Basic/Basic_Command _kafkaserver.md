@@ -1,4 +1,4 @@
-## controller participate election to select leader
+## controller participate election to select leader .controller leader select partition leader
 ## Kafka server Run step by step 
 
 
