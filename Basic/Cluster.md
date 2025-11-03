@@ -560,4 +560,40 @@ Replicas: Broker1, Broker2, Broker3
 
 ```
 
+Leader কে নির্বাচন করে Kafka Controller (Cluster-এর মধ্যে এক বা একাধিক Controller থাকে)।
 
+প্রক্রিয়া:
+
+Controller প্রতিটি Partition-এর জন্য Leader নির্বাচন করে।
+
+নির্বাচন করা হয় ISR (In-Sync Replica) list থেকে —
+মানে যারা Leader-এর সাথে data-তে sync আছে।
+
+📦 উদাহরণ:
+
+ধরো, তোমার topic my-topic আছে 3 partition সহ:
+
+Partition	Leader	Followers
+P0	Broker 1	Broker 2, Broker 3
+P1	Broker 2	Broker 1, Broker 3
+P2	Broker 3	Broker 1, Broker 2
+
+👉 যখন producer data পাঠায়:
+
+P0 → Broker 1 (Leader)
+
+P1 → Broker 2 (Leader)
+
+P2 → Broker 3 (Leader)
+
+⚠️ Leader মারা গেলে কী হয়?
+
+যদি Broker 1 মারা যায় (P0-এর leader),
+তাহলে Controller সঙ্গে সঙ্গে ISR থেকে নতুন Leader নির্বাচিত করে —
+ধরা যাক Broker 2।
+
+নতুন Leader = Broker 2
+Follower = Broker 3
+
+এভাবে Kafka data loss ছাড়াই কাজ চালিয়ে যেতে পারে —
+এটাই Kafka-র Fault Tolerance।
