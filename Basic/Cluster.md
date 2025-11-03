@@ -460,3 +460,104 @@ replication factor must be less then or equal  total node of a cluster
 
 ```
 ## when multiple nodes are available in  a cluster every 
+
+
+## Partition leader কে select করে?
+
+👉 Controller node-ই নির্ধারণ করে partition leader কে হবে।
+```
+⚙️ পুরো প্রক্রিয়া ধাপে ধাপে:
+🧩 ধাপ 1: Topic ও Partition তৈরি হয়
+
+যখন তুমি কোনো topic তৈরি করো,
+Kafka সেটার partition ও replica গুলো broker গুলিতে ছড়িয়ে দেয়।
+
+উদাহরণ:
+
+Topic: orders
+Partitions: 3
+Replication Factor: 3
+
+
+Kafka এগুলো ৩টা broker এ ভাগ করে রাখে।
+
+🧩 ধাপ 2: Controller metadata রাখে
+
+Kafka-এর controller (যে node cluster manage করে) জানে
+কোন broker-এ কোন partition-এর copy (replica) আছে।
+
+উদাহরণ:
+
+Partition	Replicas	Current Leader
+0	[Broker1, Broker2, Broker3]	Broker1
+1	[Broker2, Broker3, Broker1]	Broker2
+2	[Broker3, Broker1, Broker2]	Broker3
+🧩 ধাপ 3: Controller leader নির্বাচন করে
+
+Controller এই replica list থেকে একজনকে leader বানায়।
+অন্যরা follower থাকে।
+
+যদি leader broker down হয়ে যায় —
+Controller তা detect করে এবং follower-দের মধ্যে থেকে নতুন leader নির্বাচন করে।
+
+🧩 ধাপ 4: Leader data store করে
+
+Producer যখন data পাঠায় →
+Controller producer-কে জানায়, কোন broker সেই partition-এর leader।
+Producer কেবল সেই leader broker-এ data পাঠায়।
+
+Leader:
+
+🧾 নতুন data গ্রহণ করে
+
+🔁 follower-দের কাছে replicate করে
+
+📤 consumer-কে data পাঠায়
+
+🧩 Controller কেন নির্বাচন করে?
+
+কারণ Controller-এর কাছে পুরো cluster-এর metadata থাকে —
+কে online, কে offline, কোন partition কোন broker-এ আছে — সব তথ্য।
+
+তাই partition leader নির্বাচন Controller-ই করে,
+যাতে Kafka cluster সবসময় consistent ও fault-tolerant থাকে।
+
+⚖️ সংক্ষেপে:
+কাজ	দায়িত্বে কে
+Partition তৈরি করা	Kafka controller
+Partition leader নির্বাচন করা	✅ Controller
+Partition data store করা	✅ Leader broker
+Replication করা	✅ Follower brokers
+
+🎯 সহজভাবে মনে রাখো:
+⚙️ 1️⃣ Controller election কে করে?
+
+(এইটা background এ লাগে)
+
+সব controller node একসাথে Raft consensus algorithm ব্যবহার করে একজন Controller Leader নির্বাচন করে।
+
+সেই Controller Leader পুরো cluster পরিচালনা করে।
+
+এরপর সেই Controller Leader-ই partition leader election করায়।
+
+🎯 Controller leader হচ্ছে “Election Manager” — সে ঠিক করে কোন broker partition leader হবে।
+
+⚙️ 2️⃣ Partition leader election (data level)
+🧩 কারা অংশ নেয়:
+
+➡️ সেইসব broker, যাদের কাছে partition-এর replica আছে।
+
+🧠 উদাহরণ:
+
+ধরো —
+
+Topic: orders
+Partition: 0
+Replicas: Broker1, Broker2, Broker3
+
+
+👉 তাহলে এই তিনটি broker এই partition-এর leader হতে পারে।
+
+```
+
+
