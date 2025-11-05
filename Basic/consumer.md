@@ -1,3 +1,5 @@
+
+## number of consumers in a group should be  equal noumber of  pationtion
 ## Consumer Offset কী?
 
 Kafka-তে যখন কোনো consumer (গ্রাহক) কোনো topic থেকে data পড়ে, তখন Kafka সেই consumer কোথায় পর্যন্ত পড়েছে তা offset দিয়ে ট্র্যাক করে রাখে।
