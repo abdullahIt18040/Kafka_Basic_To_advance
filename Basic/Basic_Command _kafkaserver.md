@@ -407,4 +407,4 @@ Scalability	গ্রুপে আরও consumer যোগ করলে পা�
 No duplicate messages	একটি মেসেজ কেবল একটি consumer-এ যায় (group-এর মধ্যে)
 
 ```
-
+## same key always go same partition not different partion
