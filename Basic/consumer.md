@@ -2,7 +2,7 @@
 ## number of consumers in a group should be  equal noumber of  pationtion
 ## Consumer Offset কী?
 
-Consumer Group কী?
+## Consumer Group কী?
 Kafka-তে Consumer Group হলো এমন একটি ব্যবস্থা যেখানে একাধিক consumer মিলেই একটি group হিসেবে কাজ করে।
 একটি topic-এর মেসেজগুলো Kafka সেই গ্রুপের consumer গুলোর মধ্যে ভাগ করে দেয়।
 
