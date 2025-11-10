@@ -700,3 +700,4 @@ Follower = Broker 3
 
 এভাবে Kafka data loss ছাড়াই কাজ চালিয়ে যেতে পারে —
 এটাই Kafka-র Fault Tolerance।
+## more than one partion can assign one node, means 2 or more pation leader can be one node
