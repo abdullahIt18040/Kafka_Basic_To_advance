@@ -784,9 +784,9 @@ controller.quorum.voters → তোমার বর্তমান ৩টা ক
 process.roles=broker → এই ব্রোকার controller নয়, শুধু broker হিসেবে কাজ করবে
 ```
 ## find cluster id 
-
-Quram  thake
-
+```
+.\bin\windows\kafka-metadata-quorum.bat --bootstrap-controller localhost:9093 describe --status
+```
 ### নতুন broker ইনিশিয়ালাইজ  or storage formating করার   সময় একই cluster.id ব্যবহার করো
 
 তুমি নতুন ব্রোকারের meta.properties ফাইলেও সেই একই cluster.id দিতে হবে।
