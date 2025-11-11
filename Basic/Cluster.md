@@ -879,5 +879,6 @@ broker যোগ করার পর Kafka auto-rebalance করে না; part
 ```
 🔹 ধাপ–৩: এখন reassign command চালাও
 ```
---bootstrap-server localhost:9092 --reassignment-json-file .\config\partition-reassign.json --execute
+.\bin\windows\kafka-reassign-partitions.bat --bootstrap-server localhost:9092 --reassignment-json-file .\config\partition-reassign.json --execute
+
 ```
