@@ -836,3 +836,48 @@ controller.quorum.voters মানে হচ্ছে শুধুমাত্�
 
 broker যোগ করার পর Kafka auto-rebalance করে না; partition reassignment করতে হয়
 ```
+## partition Reassignment
+
+ধাপ–১: প্রথমে বর্তমান partition assignment দেখো
+``
+.\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --describe --topic siltest
+
+```
+এখানে তুমি দেখতে পাবে কোন partition কোন broker-এ আছে।
+একটি JSON ফাইল বানাও নতুন assignment দিয়ে
+
+উদাহরণস্বরূপ, আমরা siltest topic-এর partition-গুলোকে নতুন broker-এ দিতে চাই।
+
+একটি ফাইল বানাও — ধরো নাম দাও reassign.json
+(তুমি C:\kafka\config  ফোল্ডারে এই ফাইল রাখতে পারো)
+
+{
+  "version": 1,
+  "partitions": [
+    {
+      "topic": "siltest",
+      "partition": 0,
+      "replicas": [1,2]
+    },
+    {
+      "topic": "siltest",
+      "partition": 1,
+      "replicas": [2,3]
+    },
+    {
+      "topic": "siltest",
+      "partition": 2,
+      "replicas": [3,1]
+    }
+  ]
+}
+
+
+👉 এখানে replicas মানে হলো কোন কোন broker ঐ partition-এর কপি রাখবে।
+তুমি তোমার broker ID অনুযায়ী [1,2,3,...] পরিবর্তন করবে
+ first id  will be leader
+```
+🔹 ধাপ–৩: এখন reassign command চালাও
+```
+--bootstrap-server localhost:9092 --reassignment-json-file .\config\partition-reassign.json --execute
+```
