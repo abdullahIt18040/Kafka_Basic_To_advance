@@ -407,4 +407,5 @@ Scalability	গ্রুপে আরও consumer যোগ করলে পা�
 No duplicate messages	একটি মেসেজ কেবল একটি consumer-এ যায় (group-এর মধ্যে)
 
 ```
-## same key always go same partition not different partion. sequential task must be pass key-vlaue to the topic , if task is sequential we have to pass data with same key otherwise create data issuemeans  may be  later task execute ,before task. 2 no of task execute before 1 no of task.
+## same key always go same partition not different partion. sequential task must be pass key-vlaue to the topic , if task is sequential we have to pass data with same key otherwise create data issue means  may be  later task execute ,before task. 2 no of task execute before 1 no of task.
+“যদি টাস্কগুলোর সিকোয়েন্স অটুট রাখতে চাই, তাহলে একই কী সব সময় একই পার্টিশনে যাবে — না হলে পরে আসা টাস্ক আগে এক্সিকিউট করে ফেলতে পারে।”
