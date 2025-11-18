@@ -342,6 +342,10 @@ consumer.wakeup();
 
 প্রতিবার partition বাড়ালে full rebalance লাগে।
 
+```
+### Kafka KRaft mode-এ Consumer Rebalancing সম্পূর্ণভাবে Kafka নিজে নিজেই (automatically) handle করে।
+### Consumer বা developer-কে manually কিছু করতে হয় না (except কিছু configuration tuning).
+
 
 
 
