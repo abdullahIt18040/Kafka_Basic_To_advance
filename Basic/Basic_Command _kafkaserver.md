@@ -54,7 +54,8 @@ Kafka এখন KRaft mode (Kafka Raft) ব্যবহার করে যে�
 সফলভাবে চললে তুমি দেখবে এরকম কিছু:
 [KafkaServer id=1] started (kafka.server.KafkaServer)
 INFO [KafkaServer id=1] Kafka Server started in KRaft mode
-
+## to see all topics 
+.\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --list
 
 এবং Kafka এখন running & ready 
 ## Step-by-Step: Create a Topic in Kafka (Windows)
