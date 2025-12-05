@@ -58,4 +58,18 @@ public class AESUtil {
     }
 
 }
+
+@Configuration
+public class EncryptionConfig {
+
+    @Value("${app.encryption.key}")
+    private String encryptionKey;
+
+    @PostConstruct
+    public void init() {
+        AESUtil.setKey(encryptionKey);
+    }
+}
+
+
 ```
