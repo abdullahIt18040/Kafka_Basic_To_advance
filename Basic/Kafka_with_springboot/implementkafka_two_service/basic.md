@@ -111,3 +111,29 @@ public class KafkaStockService {
 4️⃣ Stock না থাকলে → FAILED
 5️⃣ Method যেটা return করছে, সেটা:
 ```
+   ##  @SendTo("order-place-topic")
+   @SendTo("order-place-topic") কী?
+```
+👉 @SendTo ব্যবহার করা হয় KafkaListener method-এর return value আবার Kafka-তে পাঠানোর জন্য।
+
+অর্থাৎ,
+
+Listener = Consumer + Producer একসাথে
+
+🧠 সহজ ভাষায়
+@KafkaListener(...)
+@SendTo("order-place-topic")
+public OrderPlaceEvent listenOrder(OrderRecord orderRecord) {
+    return new OrderPlaceEvent(...);
+}
+
+
+এর মানে হলো 👇
+
+1️⃣ Kafka থেকে message consume করো
+2️⃣ Business logic চালাও
+3️⃣ Method যেটা return করবে
+4️⃣ সেটাই আবার Kafka topic-এ পাঠিয়ে দাও
+
+📤 Topic = order-place-topic
+```
