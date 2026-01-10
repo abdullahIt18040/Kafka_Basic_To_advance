@@ -1,4 +1,6 @@
 ## Order Service ↔ Notification Service কীভাবে Kafka দিয়ে communicate করে সেটা সহজ বাংলায়, step-by-step ব্যাখ্যা করছি।
+<img width="1127" height="688" alt="image" src="https://github.com/user-attachments/assets/d4fcfa2e-dd6e-4e80-b358-99775b40fdc9" />
+
 ```
 🧩 Scenario (বাস্তব উদাহরণ)
 
