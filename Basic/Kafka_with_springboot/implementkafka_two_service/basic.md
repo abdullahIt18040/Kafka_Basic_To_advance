@@ -5,106 +5,109 @@
 🧩 Scenario (বাস্তব উদাহরণ)
 
 ধরুন আপনার কাছে দুইটা আলাদা Microservice আছে:
+Overall Architecture (Kafka-based Microservices)
+[ Order Service ]
+        |
+        |  OrderRecord
+        v
+Kafka Topic: ordertopic
+        |
+        v
+[ Stock Service ]
+        |
+        |  OrderPlaceEvent
+        v
+Kafka Topic: order-place-topic
+        |
+        v
+[ Notification Service ]
 
-1️⃣ Order Service
 
-👉 Order create / update করে
-👉 Kafka-তে event পাঠায়
+👉 এখানে Service ↔ Service direct call নাই
+👉 সব communication Kafka event দিয়ে
 
-2️⃣ Notification Service
+1️⃣ Order Service (Producer)
+📌 কাজ
 
-👉 Kafka থেকে event শুনে
-👉 Email / SMS / Push Notification পাঠায়
+User order দিলে
 
-এরা একজন আরেকজনকে সরাসরি call করে না (REST না),
-এরা Kafka এর মাধ্যমে কথা বলে।
+Kafka-তে event publish করে
 
-🔗 Kafka কীভাবে মাঝখানে কাজ করে
+🧾 কোড
+@Service
+public class KafkaOrderService {
 
-Kafka এখানে Message Broker / Event Bus হিসেবে কাজ করে।
+    @Autowired
+    private KafkaTemplate<String, OrderRecord> kafkaTemplate;
 
-Order Service  ──(event)──▶  Kafka Topic  ──(consume)──▶ Notification Service
+    public void publishOrderEvent(OrderRecord record) {
+        kafkaTemplate.send("ordertopic", record);
+    }
+}
 
-🧱 Step-by-Step Architecture
-┌──────────────┐
-│ Order Service│
-│ (Producer)   │
-└─────┬────────┘
-      │  OrderCreatedEvent
-      ▼
-┌──────────────────┐
-│ Kafka Topic       │
-│  order-events     │
-└─────┬────────────┘
-      │
-      ▼
-┌──────────────────┐
-│ Notification     │
-│ Service          │
-│ (Consumer)       │
-└──────────────────┘
+🔍 কী হচ্ছে?
 
-🧾 Step 1: Order Service (Producer)
+KafkaTemplate = Kafka producer
 
-Order তৈরি হলে একটা event object বানানো হয়।
+OrderRecord = order data (orderId, userId, pid)
 
-🟢 Event Data (OrderEvent)
+Message যাচ্ছে 👉 ordertopic
+
+📤 Example message:
+
 {
-  "orderId": 101,
-  "userId": 55,
-  "amount": 500,
-  "status": "CREATED"
+  "orderId": 1,
+  "userId": 10,
+  "pid": 101
 }
 
-🟢 Order Service কী করে?
+2️⃣ Stock Service (Consumer + Producer)
+📌 কাজ
 
-Order DB-তে save করে
+Order event consume করে
 
-Kafka topic-এ message পাঠায়
+Stock check করে
 
-👉 Kafka Producer
+Result আবার Kafka-তে পাঠায়
 
-kafkaTemplate.send("order-events", orderEvent);
+🧾 Stock Service কোড
+@Service
+public class KafkaStockService {
 
+    private static final Map<Integer,Integer> stockMap = Map.of(
+        101, 5,
+        102, 10
+    );
 
-Order Service এখানে জানেই না কে consume করবে।
+    @KafkaListener(
+        topics = {"ordertopic"},
+        groupId = "order-consumer-grp"
+    )
+    @SendTo("order-place-topic")
+    public OrderPlaceEvent listenOrder(OrderRecord orderRecord) {
 
-📦 Step 2: Kafka Topic
-Topic Name: order-events
+        var PID = orderRecord.pid();
+        var stock = stockMap.get(PID);
 
-Kafka topic হলো:
+        if (stock > 0) {
+            return new OrderPlaceEvent(
+                OrderStatus.SUCCESS,
+                orderRecord.userId()
+            );
+        }
 
-Durable (ডাটা হারায় না)
-
-Queue না, log
-
-Multiple consumer পড়তে পারে
-
-Kafka শুধু message store + deliver করে।
-
-🔔 Step 3: Notification Service (Consumer)
-
-Notification Service Kafka-তে listener বসায়।
-
-@KafkaListener(topics = "order-events", groupId = "notification-group")
-public void consume(OrderEvent event) {
-    sendNotification(event);
+        return new OrderPlaceEvent(
+            OrderStatus.FAILED,
+            orderRecord.userId()
+        );
+    }
 }
 
+🔍 কী হচ্ছে?
 
-Kafka যখনই নতুন message পাবে:
-➡ Notification Service automatically পেয়ে যাবে।
-
-📨 Notification Service কী করে?
-
-Event পেলে:
-
-Email পাঠায়
-
-SMS পাঠায়
-
-Push Notification পাঠায়
-
-Order Service এসব জানেই না ❌
-Loose Coupling ✔
+1️⃣ Kafka থেকে OrderRecord আসছে
+2️⃣ Stock map থেকে quantity check
+3️⃣ Stock থাকলে → SUCCESS
+4️⃣ Stock না থাকলে → FAILED
+5️⃣ Method যেটা return করছে, সেটা:
 ```
