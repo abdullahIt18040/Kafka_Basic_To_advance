@@ -173,5 +173,10 @@ User blocked
 
 👉 এগুলো event হিসেবেই publish করতে হব
 ```
+## Core Principle (One-line rule)
+<img width="567" height="112" alt="image" src="https://github.com/user-attachments/assets/10ccac7b-7402-4788-aa4a-ef80938af196" />
+
+Business error → Event বানাও
+Technical error → Retry করো (তারপর DLT)
 
 
