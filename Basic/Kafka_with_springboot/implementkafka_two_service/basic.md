@@ -128,7 +128,7 @@ public OrderPlaceEvent listenOrder(OrderRecord orderRecord) {
 }
 
 
-এর মানে হলো 👇
+এর মানে হলো
 
 1️⃣ Kafka থেকে message consume করো
 2️⃣ Business logic চালাও
@@ -136,4 +136,42 @@ public OrderPlaceEvent listenOrder(OrderRecord orderRecord) {
 4️⃣ সেটাই আবার Kafka topic-এ পাঠিয়ে দাও
 
 📤 Topic = order-place-topic
+
 ```
+## how to handle technical issuse and how to handle business issuse error.Kafka + Microservices-এ technical issue আর business issue আলাদা করে handle করা best practice
+```
+Technical Issue vs Business Issue (Concept)
+🔴 Technical Issue (System problem)
+
+এগুলো retry করা যায়:
+
+Kafka deserialization error
+
+DB down
+
+Network timeout
+
+Service crash
+
+NullPointerException
+
+Timeout / 5xx error
+
+👉 এগুলো system fix হলে আবার process করা উচিত
+
+🟡 Business Issue (Domain rule failure)
+
+এগুলো retry করলেও লাভ নেই:
+
+Stock নাই
+
+Invalid order
+
+Payment failed (insufficient balance)
+
+User blocked
+
+👉 এগুলো event হিসেবেই publish করতে হব
+```
+
+
