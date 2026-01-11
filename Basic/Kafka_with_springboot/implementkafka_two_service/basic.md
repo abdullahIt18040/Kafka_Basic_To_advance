@@ -239,6 +239,8 @@ Kafka কী ভাবে?
 
 📌 এটা Kafka-র natural & recommended flow
 ```
+## retry and error handling 
+<img width="1566" height="863" alt="image" src="https://github.com/user-attachments/assets/8f3915fa-a0f9-4856-b19e-a0cd4db6684d" />
 
 
 
