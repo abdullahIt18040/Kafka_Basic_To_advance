@@ -241,6 +241,11 @@ Kafka কী ভাবে?
 ```
 ## retry and error handling 
 <img width="1437" height="863" alt="image" src="https://github.com/user-attachments/assets/01438b88-700e-498c-bdc4-a8b4a400b5a7" />
+## my hand note
+<img width="670" height="884" alt="image" src="https://github.com/user-attachments/assets/dd9708fd-0250-4227-b59f-8cc371a3c226" />
+<img width="475" height="375" alt="image" src="https://github.com/user-attachments/assets/8f11b231-5d46-4d43-914d-3b407f62bd6f" />
+
+
 
 
 
