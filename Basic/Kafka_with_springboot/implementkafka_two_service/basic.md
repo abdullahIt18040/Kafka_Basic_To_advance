@@ -2,7 +2,7 @@
 <img width="1127" height="688" alt="image" src="https://github.com/user-attachments/assets/d4fcfa2e-dd6e-4e80-b358-99775b40fdc9" />
 
 ```
-🧩 Scenario (বাস্তব উদাহরণ)
+ Scenario ()
 
 ধরুন আপনার কাছে দুইটা আলাদা Microservice আছে:
 Overall Architecture (Kafka-based Microservices)
@@ -138,7 +138,8 @@ public OrderPlaceEvent listenOrder(OrderRecord orderRecord) {
 📤 Topic = order-place-topic
 
 ```
-## how to handle technical issuse and how to handle business issuse error.Kafka + Microservices-এ technical issue আর business issue আলাদা করে handle করা best practice
+## how to handle technical issuse and how to handle business issuse error.
+## Kafka + Microservices-এ technical issue আর business issue আলাদা করে handle করা best practice
 ```
 Technical Issue vs Business Issue (Concept)
 🔴 Technical Issue (System problem)
@@ -175,8 +176,72 @@ User blocked
 ```
 ## Core Principle (One-line rule)
 <img width="567" height="112" alt="image" src="https://github.com/user-attachments/assets/10ccac7b-7402-4788-aa4a-ef80938af196" />
-
+```
 Business error → Event বানাও
 Technical error → Retry করো (তারপর DLT)
+```
+## how to handle error centrally in kafka .
+
+```
+Exception কে Event বানিয়ে Kafka Topic-এ পাঠালে কী হয়?
+Exception → Event → Kafka Topic
+
+কী ঘটে?
+
+Listener এর ভিতরে exception ধরা (catch) হয়
+
+Exception কে message/event বানানো হয়
+
+অন্য Kafka topic-এ send করা হয়
+
+Listener method successful ভাবে শেষ হয়
+
+Kafka কী ভাবে?
+
+🟢 Kafka বলে: “কাজ শেষ, message consume হয়ে গেছে”
+
+ফলাফল
+
+✅ Offset commit হয়ে যায়
+
+❌ Retry হয় না
+
+❌ @RetryableTopic কাজ করে না
+
+❌ Kafka আর আগের message নিয়ে মাথা ঘামায় না
+
+📌 এটা manual handling, Kafka-র retry mechanism বাইপাস হয়ে যায়
+
+2️⃣ Exception rethrow করলে কী হয়?
+Exception → throw → Kafka Retry
+
+কী ঘটে?
+
+Exception ধরা হয় না, অথবা
+
+ধরলেও আবার throw করা হয়
+
+Spring Kafka exception ধরে নেয়
+
+Kafka কী ভাবে?
+
+🔁 Kafka বলে: “এই message fail করেছে, আবার চেষ্টা করবো”
+
+ফলাফল
+
+✅ Retry topic এ পাঠানো হয়
+
+✅ Backoff কাজ করে
+
+✅ Retry শেষ হলে DLT তে যায়
+
+✅ @RetryableTopic কাজ করে
+
+📌 এটা Kafka-র natural & recommended flow
+```
+
+
+
+
 
 
