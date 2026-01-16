@@ -443,4 +443,74 @@ public void consume(String message) {
 
 👉 Kafka internally 3টা consumer thread তৈরি করবে.
 ```
+## Offset Commit কী?
+```
+Offset commit মানে হলো
+👉 Consumer Kafka-কে জানায়:
 
+“আমি এই offset পর্যন্ত message process করেছি”
+
+এতে consumer restart হলেও সঠিক জায়গা থেকে পড়া শুরু হয়।
+
+২️⃣ commitSync (Synchronous Commit)
+
+👉 Consumer অপেক্ষা করে যতক্ষণ না Kafka offset save করার confirmation দেয়
+
+কীভাবে কাজ করে?
+process message
+→ commitSync()
+→ Kafka confirms
+→ next message
+
+Example
+consumer.commitSync();
+
+সুবিধা
+
+✔ Reliable
+✔ Failure immediately জানা যায়
+✔ Offset loss হয় না
+
+অসুবিধা
+
+❌ Slow
+❌ Throughput কম
+
+Use case
+
+Payment
+
+Financial transaction
+
+Critical data
+
+৩️⃣ commitAsync (Asynchronous Commit)
+
+👉 Consumer অপেক্ষা করে না, background-এ commit request পাঠায়
+
+কীভাবে কাজ করে?
+process message
+→ commitAsync()
+→ continue processing
+
+Example
+consumer.commitAsync();
+
+সুবিধা
+
+✔ Fast
+✔ High throughput
+
+অসুবিধা
+
+❌ Failure silently ignore হতে পারে
+❌ Duplicate processing হতে পারে
+
+Use case
+
+Logs
+
+Metrics
+
+Analytics
+```
