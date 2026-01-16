@@ -273,3 +273,106 @@ try {
 ❌ Commit failure হলে consumer জানতেও পারে না
 ❌ Offset miss হতে পারে (rare case)
 ```
+##  Rebalancing কী?
+```
+
+Rebalancing হলো এমন একটি process যেখানে Kafka
+👉 Partition গুলো consumer-দের মধ্যে নতুন করে ভাগ করে দেয়
+
+এটা ঘটে যখন Consumer Group-এর পরিবর্তন হয়
+
+২️⃣ কখন Rebalancing হয়?
+
+Rebalancing সাধারণত হয় যখন 👇
+
+✅ ১. নতুন Consumer যোগ হয়
+Consumer-1, Consumer-2  →  Consumer-3 join
+
+✅ ২. কোনো Consumer down / crash করে
+Consumer-2 died
+
+✅ ৩. Topic-এর Partition সংখ্যা বাড়ে
+Partitions: 3 → 5
+
+✅ ৪. Consumer বেশি সময় poll না করে
+max.poll.interval.ms exceeded
+
+৩️⃣ Rebalancing-এর সময় কী হয়?
+
+⚠️ এই সময় message processing সাময়িকভাবে থেমে যায়
+
+Step-by-step 👇
+
+1. Kafka সব consumer-কে stop করতে বলে
+2. Old partition assignment revoke হয়
+3. New partition assignment হয়
+4. Consumer নতুন partition থেকে read শুরু করে
+
+৪️⃣ Rebalancing কেন দরকার?
+
+✔ Load evenly distribute করতে
+✔ Fault tolerance নিশ্চিত করতে
+✔ Scaling সহজ করতে
+
+৫️⃣ Example (সহজভাবে)
+
+Topic: order-topic
+Partitions: 3
+Consumer Group: order-group
+
+Before Rebalance
+Consumer-1 → P0, P1
+Consumer-2 → P2
+
+New Consumer Join করল
+Consumer-3 join
+
+After Rebalance
+Consumer-1 → P0
+Consumer-2 → P1
+Consumer-3 → P2
+
+৬️⃣ Rebalancing-এর সমস্যা (Side Effects)
+
+❌ Temporary downtime
+❌ Duplicate message হতে পারে
+❌ Offset commit delay হতে পারে
+
+৭️⃣ Rebalancing কমানোর উপায়
+✅ ১. Static Membership ব্যবহার করো
+group.instance.id=consumer-1
+
+✅ ২. max.poll.interval.ms ঠিক করো
+max.poll.interval.ms=300000
+
+✅ ৩. session.timeout.ms & heartbeat ঠিক রাখো
+session.timeout.ms=10000
+heartbeat.interval.ms=3000
+
+৮️⃣ Cooperative Rebalancing কী?
+
+Kafka-এর নতুন feature (Incremental Rebalance)
+
+সব consumer stop করে না
+
+ধাপে ধাপে partition move করে
+
+Downtime কম হয়
+
+partition.assignment.strategy=org.apache.kafka.clients.consumer.CooperativeStickyAssignor
+
+৯️⃣ Rebalancing & Offset Commit সম্পর্ক
+
+⚠️ Rebalance হওয়ার আগে offset commit না হলে
+👉 Duplicate processing হতে পারে
+
+Best practice 👇
+
+onPartitionsRevoked() {
+   commitSync();
+}
+
+🔟 One Line Summary
+
+Rebalancing হলো Kafka process যেখানে consumer group পরিবর্তন হলে partition গুলো নতুন করে consumer-দের মধ্যে ভাগ করা হয়।
+```
