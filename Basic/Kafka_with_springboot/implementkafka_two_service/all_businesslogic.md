@@ -220,3 +220,56 @@ orderId=101 → Partition-1 (same!)
 
 Partition হলো Kafka Topic-এর ভিতরের parallel data stream, যেখানে প্রতিটা Partition নিজের offset ধরে message store করে।
 ```
+##  Offset Commit মানে কী?
+```
+Offset commit মানে হলো
+👉 Consumer Kafka-কে জানায়:
+
+“আমি এই offset পর্যন্ত message process করেছি”
+
+এতে consumer restart হলেও Kafka জানে কোথা থেকে আবার পড়া শুরু করবে
+
+২️⃣ commitAsync কী?
+
+commitAsync() হলো non-blocking offset commit method
+
+Consumer offset Kafka-তে পাঠায়
+
+wait করে না
+
+পরের message process করতে থাকে
+
+👉 Faster কিন্তু একটু risk আছে
+
+৩️⃣ commitAsync কীভাবে কাজ করে?
+
+ধাপে ধাপে 👇
+
+1. Consumer message পড়ে
+2. Business logic process করে
+3. commitAsync() কল করে
+4. Kafka background-এ offset save করে
+5. Consumer next message process করে
+
+৪️⃣ Example (Java)
+try {
+    while (true) {
+        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
+
+        for (ConsumerRecord<String, String> record : records) {
+            process(record);
+        }
+
+        consumer.commitAsync();
+    }
+} finally {
+    consumer.close();
+}
+
+৫️⃣ commitAsync-এর বৈশিষ্ট্য
+
+✅ Fast
+✅ Throughput বেশি
+❌ Commit failure হলে consumer জানতেও পারে না
+❌ Offset miss হতে পারে (rare case)
+```
