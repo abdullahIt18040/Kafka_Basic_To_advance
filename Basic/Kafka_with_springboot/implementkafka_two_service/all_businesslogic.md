@@ -376,3 +376,71 @@ onPartitionsRevoked() {
 
 Rebalancing হলো Kafka process যেখানে consumer group পরিবর্তন হলে partition গুলো নতুন করে consumer-দের মধ্যে ভাগ করা হয়।
 ```
+## concurency 3  means:consumer ,for a topic have  3 partion its has  3 consumer (in a consumer group) .3 consumer consumer data from 3 pationtion diffrent threads.
+## Kafka-তে Concurrency কীভাবে কাজ করে?
+```
+
+Kafka-র rule খুব simple 👇
+
+একই Consumer Group-এ
+1 Partition → 1 Consumer Thread
+
+৩️⃣ Example (সহজভাবে)
+
+Topic: order-topic
+Partitions: 3
+
+Case 1: 1 Consumer
+Consumer-1 → P0, P1, P2
+
+
+👉 No concurrency (serial processing)
+
+Case 2: 3 Consumers
+Consumer-1 → P0
+Consumer-2 → P1
+Consumer-3 → P2
+
+
+👉 3x concurrency
+
+Case 3: 5 Consumers
+Consumer-1 → P0
+Consumer-2 → P1
+Consumer-3 → P2
+Consumer-4 → Idle
+Consumer-5 → Idle
+
+
+👉 Extra consumer idle থাকবে
+
+৪️⃣ Consumer Thread vs Instance
+
+Concurrency ২ভাবে করা যায় 👇
+
+✅ ১. Multiple Consumer Instance
+
+আলাদা JVM / Pod
+
+Best for production
+
+✅ ২. Multiple Threads (same JVM)
+
+Spring Kafka-তে common
+
+concurrency=3
+
+৫️⃣ Spring Boot Example
+@KafkaListener(
+    topics = "order-topic",
+    groupId = "order-group",
+    concurrency = "3"
+)
+public void consume(String message) {
+    process(message);
+}
+
+
+👉 Kafka internally 3টা consumer thread তৈরি করবে.
+```
+
