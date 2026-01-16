@@ -95,3 +95,128 @@ Time = Offset
 
 Kafka-তে message Topic-এর ভিতরে sequential offset সহ store হয়, আর consumer সেই offset ধরে ধরে message পড়ে।
 ```
+##  Partition কী?
+```
+
+Partition হলো Kafka Topic-এর ভিতরের ছোট ছোট ভাগ
+
+👉 Topic = বড় বাক্স
+👉 Partition = বাক্সের ভিতরের আলাদা আলাদা খোপ
+
+Kafka ডাটা সরাসরি Topic-এ না রেখে Partition-এ store করে
+
+২️⃣ কেন Partition দরকার?
+
+Partition ব্যবহারের মূল কারণ 👇
+
+✔ High performance (parallel processing)
+✔ Scalability (বেশি data handle করা)
+✔ Multiple consumer একসাথে কাজ করতে পারে
+
+৩️⃣ Topic → Partition → Message → Offset
+
+একটা Topic-এর ভিতরে একাধিক Partition থাকতে পারে
+
+উদাহরণ 👇
+Topic: order-topic
+Partitions: 3 (P0, P1, P2)
+
+order-topic
+ ├── Partition 0
+ ├── Partition 1
+ └── Partition 2
+
+৪️⃣ Partition-এর ভিতরে Offset
+
+⚠️ Offset সবসময় Partition অনুযায়ী হয়, Topic অনুযায়ী নয়
+
+Partition 0:
+
+Offset	Message
+0	Order-1
+1	Order-4
+
+Partition 1:
+
+Offset	Message
+0	Order-2
+1	Order-5
+
+Partition 2:
+
+Offset	Message
+0	Order-3
+
+👉 এখানে দেখো, প্রতিটা Partition-এর offset আলাদা করে 0 থেকে শুরু হয়েছে
+
+৫️⃣ Producer কীভাবে Partition নির্বাচন করে?
+
+Producer message পাঠানোর সময় Partition বেছে নেয় ৩ভাবে 👇
+
+✅ ১. Key দিয়ে
+producer.send("order-topic", "userId-101", message);
+
+
+একই key → সবসময় একই Partition
+
+Order guarantee থাকে
+
+✅ ২. Round Robin (key না দিলে)
+
+একেক message একেক Partition-এ যায়
+
+✅ ৩. Custom Partitioner
+
+নিজের logic লিখে Partition select করা যায়
+
+৬️⃣ Consumer & Partition সম্পর্ক
+
+⚠️ একটা Partition একসময় একটাই Consumer পড়তে পারে (same group-এ)
+
+উদাহরণ 👇
+
+Topic → 3 partitions
+
+Consumer Group → 3 consumers
+
+Consumer-1 → Partition-0
+Consumer-2 → Partition-1
+Consumer-3 → Partition-2
+
+
+👉 Consumer বাড়ালে processing speed বাড়ে
+
+৭️⃣ Consumer বেশি হলে কী হবে?
+
+Partition = 3
+Consumer = 5
+
+👉 2টা Consumer idle থাকবে
+কারণ:
+
+1 Partition = 1 Consumer (per group)
+
+৮️⃣ Order Guarantee কীভাবে হয়?
+
+👉 একই Partition-এর ভিতরে order always maintained
+👉 ভিন্ন Partition-এর মধ্যে order guarantee নেই
+
+৯️⃣ Partition বাস্তব উদাহরণ
+
+🛒 E-commerce example:
+
+Topic: order-events
+
+Key: orderId
+
+orderId=101 → Partition-1
+orderId=102 → Partition-0
+orderId=101 → Partition-1 (same!)
+
+
+👉 একই order-এর event কখনো mix হবে না
+
+🔟 সংক্ষেপে (One Line)
+
+Partition হলো Kafka Topic-এর ভিতরের parallel data stream, যেখানে প্রতিটা Partition নিজের offset ধরে message store করে।
+```
