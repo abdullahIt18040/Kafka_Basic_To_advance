@@ -556,6 +556,7 @@ ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
 
 
 📌 এখানে consumer order-topic এর partition 0 থেকে offset 10-এর message পড়া শুরু করবে।
-<img width="1024" height="477" alt="image" src="https://github.com/user-attachments/assets/0104e742-4604-43dd-a11c-34eaa34cdfcc" />
 
 ```
+<img width="1024" height="477" alt="image" src="https://github.com/user-attachments/assets/0104e742-4604-43dd-a11c-34eaa34cdfcc" />
+
