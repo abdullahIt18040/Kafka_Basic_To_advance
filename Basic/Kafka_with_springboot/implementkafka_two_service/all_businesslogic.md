@@ -560,3 +560,120 @@ ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
 ```
 <img width="1024" height="477" alt="image" src="https://github.com/user-attachments/assets/0104e742-4604-43dd-a11c-34eaa34cdfcc" />
 
+## Default Retry Mecharnism 
+
+## Default Retry Mechanism মানে কী?
+```
+
+👉 কোনো extra retry configuration না দিলে Spring Kafka যেভাবে exception handle করে, সেটাই default retry mechanism।
+
+⚠️ গুরুত্বপূর্ণ কথা:
+
+Kafka নিজে retry করে না
+Retry পুরোপুরি consumer / Spring Kafka-এর দায়িত্ব
+
+🔹 Default Behaviour (Retry configure না করলে)
+@KafkaListener(topics = "order-topic")
+public void consume(String msg) {
+    throw new RuntimeException("Processing failed");
+}
+
+তখন কী হয়?
+
+1️⃣ Consumer message পড়ল
+2️⃣ Exception হলো
+3️⃣ Offset commit হলো না
+4️⃣ Kafka ধরে নিল message process হয়নি
+5️⃣ Next poll()-এ same message আবার আসবে
+
+👉 এটাকেই অনেকে ভুল করে retry ভাবে
+কিন্তু আসলে এটা controlled retry না ❌
+
+🔹 Default Retry কীভাবে হয় (Internally)?
+🔁 Poll Loop Retry
+
+Consumer একই offset-এ আটকে থাকে
+
+কোনো delay নেই
+
+Infinite loop তৈরি হয়
+
+poll()
+ → process
+   → exception
+     → no commit
+       → poll()
+         → same message again
+```
+## to resolve infinite loop for default retry mecharnism we are configure     @RetryableTopic(attempts = "5")
+## auto.offset.reset কী?
+```
+auto.offset.reset হলো Kafka consumer-এর একটি configuration property।
+
+👉 এটা বলে দেয়:
+
+যদি consumer group-এর জন্য কোনো committed offset না পাওয়া যায়, তখন consumer কোথা থেকে পড়া শুরু করবে
+
+📌 এই property কাজ করে শুধু তখনই, যখন:
+
+Consumer নতুন group
+
+Offset কখনো commit হয়নি
+
+Committed offset expire হয়ে গেছে
+
+🔹 earliest মানে কী?
+auto.offset.reset=earliest
+
+Behaviour:
+
+👉 Topic-এর একদম শুরু (offset 0) থেকে সব message পড়বে
+
+Example:
+
+Topic-এ 100টা message আছে
+
+New consumer group join করল
+
+➡️ Consumer পড়বে:
+
+offset 0 → 99
+
+কখন ব্যবহার করবো?
+
+✔️ Data reprocessing
+✔️ Analytics / reporting
+✔️ Event sourcing
+✔️ Debugging
+
+⚠️ Risk:
+
+অনেক পুরোনো data পড়তে পারে
+
+Startup slow হতে পারে
+
+🔹 latest মানে কী?
+auto.offset.reset=latest
+
+Behaviour:
+
+👉 Consumer start হওয়ার পর যেসব নতুন message আসবে, শুধু সেগুলো পড়বে
+
+Example:
+
+Topic-এ আগেই 100টা message আছে
+
+New consumer group join করল
+
+➡️ Consumer পড়বে:
+
+offset 100 থেকে onward
+
+কখন ব্যবহার করবো?
+
+✔️ Real-time processing
+✔️ Notification system
+✔️ Live stream
+✔️ Low-latency apps
+```
+
