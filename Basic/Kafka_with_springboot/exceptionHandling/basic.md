@@ -163,8 +163,97 @@ hand note is
 <img width="629" height="767" alt="image" src="https://github.com/user-attachments/assets/f9e25b9f-4169-4bb9-a7eb-ae73ee7294de" />
 <img width="618" height="559" alt="image" src="https://github.com/user-attachments/assets/e4f96b8d-3a79-4522-9529-35aaab47dcf0" />
 
+## @EnableScheduling কী?
+```
+
+@EnableScheduling হলো Spring-এর একটি annotation
+এটা দিলে Spring বুঝে নেয় যে—
+
+👉 এই application-এ scheduled (সময় অনুযায়ী) কাজ চলবে
+
+মানে:
+
+নির্দিষ্ট সময় পরপর কাজ চলবে
+
+অথবা নির্দিষ্ট সময়ে একবার কাজ চলবে
+
+🔹 এটা কেন দরকার?
+
+Spring-এ আপনি যদি এই annotation দেন:
+
+@Scheduled(fixedDelay = 5000)
+public void doSomething() {
+    System.out.println("Hello");
+}
 
 
+❌ কিন্তু @EnableScheduling না দেন → method কখনোই চলবে না
+
+👉 কারণ Spring scheduler enable হয়নি।
+
+🔹 কোথায় ব্যবহার করবেন?
+
+সাধারণত main application class বা config class-এ।
+
+Example
+@SpringBootApplication
+@EnableScheduling
+public class KafkaEosbApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(KafkaEosbApplication.class, args);
+    }
+}
+
+🔹 @EnableScheduling কীভাবে কাজ করে? (Simple Flow)
+
+1️⃣ Application start হয়
+2️⃣ Spring scheduler activate হয়
+3️⃣ @Scheduled দেওয়া method খুঁজে
+4️⃣ সময় অনুযায়ী auto execute করে
+
+🔹 @Scheduled এর ধরন
+1️⃣ Fixed Rate
+@Scheduled(fixedRate = 5000)
+
+
+⏱ প্রতি ৫ সেকেন্ডে একবার (previous শেষ হোক বা না হোক)
+
+2️⃣ Fixed Delay
+@Scheduled(fixedDelay = 5000)
+
+
+⏳ আগের কাজ শেষ হওয়ার ৫ সেকেন্ড পর আবার শুরু
+
+3️⃣ Cron Expression
+@Scheduled(cron = "0 0 2 * * ?")
+
+
+🕑 প্রতিদিন রাত ২টায়
+
+🔹 Kafka + @EnableScheduling (আপনার Case)
+
+আপনি যখন @RetryableTopic ব্যবহার করছেন:
+
+@RetryableTopic(backoff = @Backoff(delay = 5000))
+
+
+👉 Spring internally:
+
+delay handle করে
+
+retry schedule করে
+
+📌 এজন্য scheduler দরকার
+
+👉 আপনি যখন TaskScheduler bean দেন বা
+@EnableScheduling enable করেন, তখন Spring এই কাজ করতে পারে।
+
+⚠️ Note:
+@RetryableTopic এর জন্য TaskScheduler MUST,
+@EnableScheduling একা সবসময় যথেষ্ট না — কিন্তু useful।
+
+
+```
 
 
 
