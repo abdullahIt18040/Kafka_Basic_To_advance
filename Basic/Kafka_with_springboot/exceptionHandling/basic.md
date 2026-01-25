@@ -260,6 +260,110 @@ retry schedule করে
 
 
 ```
+## Kafka Rebalance কী?
+```
+Kafka Rebalance হলো এমন একটি process যেখানে
+👉 consumer group-এর মধ্যে partition গুলো আবার নতুন করে ভাগ করা হয়।
+
+সহজ ভাষায়:
+
+“কে কোন partition পড়বে—এই দায়িত্ব নতুন করে ঠিক করা”
+
+🎯 কেন Rebalance হয়?
+
+Rebalance হয় যখন consumer group-এ কিছু পরিবর্তন আসে।
+
+প্রধান কারণগুলো:
+
+1️⃣ নতুন consumer যোগ হলে
+2️⃣ কোনো consumer বন্ধ / crash হলে
+3️⃣ consumer বেশি সময় poll না করলে
+4️⃣ topic-এ partition বাড়ালে
+5️⃣ application restart হলে
+
+🧠 Real-life উদাহরণ
+
+ধরি:
+
+Topic: order-topic
+
+Partition: 4 (P0, P1, P2, P3)
+
+Consumer group: order-group
+
+🔹 শুরুতে
+Consumer-1 → P0, P1
+Consumer-2 → P2, P3
+
+🔥 নতুন Consumer যোগ হলে
+Consumer-1 → P0
+Consumer-2 → P1
+Consumer-3 → P2, P3
 
 
+👉 এই repartition করাটাই Rebalance
 
+⚠️ Rebalance সময় কী হয়?
+
+❌ কিছু সময়ের জন্য:
+
+consumer message পড়া বন্ধ থাকে
+
+latency বাড়ে
+
+👉 তাই frequent rebalance খারাপ
+
+🟡 Kafka Rebalance Process (Step by Step)
+
+1️⃣ Kafka detect করে consumer change
+2️⃣ Group Coordinator rebalance শুরু করে
+3️⃣ সব consumer pause হয়
+4️⃣ Partition নতুন করে assign হয়
+5️⃣ Consumer আবার message পড়া শুরু করে
+
+🔧 Rebalance Trigger করা Kafka Config
+1️⃣ max.poll.interval.ms
+max.poll.interval.ms: 300000
+
+
+👉 বেশি সময় process করলে poll দেরি → rebalance
+
+2️⃣ session.timeout.ms
+session.timeout.ms: 10000
+
+
+👉 heartbeat miss হলে rebalance
+
+3️⃣ max.poll.records
+max.poll.records: 1
+
+
+👉 বেশি record + slow processing → rebalance
+
+🔥 Kafka Rebalance কেন Dangerous?
+সমস্যা	কারণ
+Duplicate message	rebalance-এর আগে commit না হলে
+Message delay	consumer pause
+Throughput কমে	frequent rebalance
+✅ Best Practices (VERY IMPORTANT)
+✔ 1. Processing দ্রুত করুন
+
+heavy DB call async করুন
+
+✔ 2. max.poll.interval.ms বাড়ান
+max.poll.interval.ms: 600000
+
+✔ 3. Static Membership ব্যবহার করুন
+group.instance.id: consumer-1
+
+
+👉 restart হলেও rebalance হবে না 😎
+
+✔ 4. Cooperative Rebalance ব্যবহার করুন
+partition.assignment.strategy:
+  - org.apache.kafka.clients.consumer.CooperativeStickyAssignor
+
+
+👉 Full rebalance না করে step-by-step assign করে
+
+```
