@@ -156,6 +156,9 @@ Fatal	Authorization	App বন্ধ
 ✅ Proper logging
 ✅ Consumer lag মনিটর
 ✅ DLQ message সংখ্যা মনিটর
+we must implement
+<img width="975" height="472" alt="image" src="https://github.com/user-attachments/assets/feb2465e-da79-4e39-9c3b-1e63a0c9e0a6" />
+
 ```
 <img width="1569" height="909" alt="image" src="https://github.com/user-attachments/assets/eb6b458d-3955-4ef6-b2ab-50150d570a5c" />
 
