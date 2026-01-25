@@ -157,7 +157,14 @@ Fatal	Authorization	App বন্ধ
 ✅ Consumer lag মনিটর
 ✅ DLQ message সংখ্যা মনিটর
 ```
-<img width="1609" height="853" alt="image" src="https://github.com/user-attachments/assets/148d5a43-4af6-41df-b922-e6660ad7f69b" />
+<img width="1569" height="909" alt="image" src="https://github.com/user-attachments/assets/eb6b458d-3955-4ef6-b2ab-50150d570a5c" />
+
+hand note is 
+<img width="629" height="767" alt="image" src="https://github.com/user-attachments/assets/f9e25b9f-4169-4bb9-a7eb-ae73ee7294de" />
+<img width="618" height="559" alt="image" src="https://github.com/user-attachments/assets/e4f96b8d-3a79-4522-9529-35aaab47dcf0" />
+
+
+
 
 
 
