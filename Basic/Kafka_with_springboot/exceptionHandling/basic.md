@@ -162,6 +162,7 @@ Fatal	Authorization	App বন্ধ
 we must implement
 <img width="975" height="472" alt="image" src="https://github.com/user-attachments/assets/feb2465e-da79-4e39-9c3b-1e63a0c9e0a6" />
 <img width="1569" height="909" alt="image" src="https://github.com/user-attachments/assets/eb6b458d-3955-4ef6-b2ab-50150d570a5c" />
+<img width="1546" height="878" alt="image" src="https://github.com/user-attachments/assets/08062691-38e3-444c-bf0e-0909a1ee6c62" />
 
 hand note is 
 <img width="629" height="767" alt="image" src="https://github.com/user-attachments/assets/f9e25b9f-4169-4bb9-a7eb-ae73ee7294de" />
