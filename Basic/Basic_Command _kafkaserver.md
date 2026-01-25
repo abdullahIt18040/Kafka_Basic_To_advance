@@ -306,6 +306,8 @@ value = text after :
 .\bin\windows\kafka-topics.bat --describe --topic my-first-topicone --bootstrap-server localhost:9092
 
 ```
+## To show consumer group details):
+.\bin\windows\kafka-consumer-groups.bat --bootstrap-server localhost:9092 --describe --group order-consumer-grp
 
 # কোন Consumer কোন Partition থেকে ডেটা consume করবে—এটি কি নিজে থেকে নির্দিষ্ট করা যায়? 
 Consumer Group-এর ডিফল্ট আচরণ:
