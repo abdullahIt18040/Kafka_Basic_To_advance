@@ -367,3 +367,9 @@ partition.assignment.strategy:
 👉 Full rebalance না করে step-by-step assign করে
 
 ```
+initally there is two consumer in a group :
+<img width="1591" height="737" alt="image" src="https://github.com/user-attachments/assets/57ffd21d-545e-4eb7-b90f-edaace3af560" />
+some time later one consumer diead ,as a result consumer reblancing.
+
+
+ 
