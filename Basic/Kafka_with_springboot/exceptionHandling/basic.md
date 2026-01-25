@@ -369,7 +369,34 @@ partition.assignment.strategy:
 ```
 initally there is two consumer in a group :
 <img width="1591" height="737" alt="image" src="https://github.com/user-attachments/assets/57ffd21d-545e-4eb7-b90f-edaace3af560" />
-some time later one consumer diead ,as a result consumer reblancing.
+## some time later one consumer diead ,as a result consumer reblancing.
+afka Config Summary (সংক্ষেপে)
+```
+session.timeout.ms=60000
+heartbeat.interval.ms=20000
+max.poll.interval.ms=600000
+heartbeat.interval.ms = 20000
+
+Consumer প্রতি ২০ সেকেন্ডে broker-কে heartbeat পাঠায়
+
+Broker বুঝতে পারে consumer alive
+
+session.timeout.ms এর ভেতরে heartbeat না গেলে → rebalance
+
+max.poll.interval.ms = 600000
+
+দুইটা poll() এর মাঝে সর্বোচ্চ ১০ মিনিট gap
+
+Processing সময় ১০ মিনিট ছাড়ালে → rebalance
+(heartbeat থাকলেও)
+
+Bottom line
+
+Heartbeat = alive signal
+
+Poll interval = work-in-progress signal
+
+যেকোনোটা timeout ছাড়ালেই → Consumer Group Rebalance
 
 
  
